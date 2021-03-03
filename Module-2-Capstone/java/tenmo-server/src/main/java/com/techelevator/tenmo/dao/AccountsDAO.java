@@ -15,7 +15,7 @@ public interface AccountsDAO {
 	public List<Accounts> getAllAccounts();
 
 	// update 
-	public void updateAccount(Accounts updatedAccount);
+	public void updateAccountBalance(Accounts account, double balance);
 	
 	// delete 
 	public void deleteAccount(Long id);

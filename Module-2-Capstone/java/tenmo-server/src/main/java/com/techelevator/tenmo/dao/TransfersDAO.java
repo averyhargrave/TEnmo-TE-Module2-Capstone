@@ -11,9 +11,6 @@ public interface TransfersDAO {
 	//create
 	public Transfers createTransfers (Transfers newTransfer);
 	
-	// update
-	public void updateTransfer (Transfers updatedTransfer); 
-	
 	// read
 	public Transfers searchByTransferId (Long id);
 
