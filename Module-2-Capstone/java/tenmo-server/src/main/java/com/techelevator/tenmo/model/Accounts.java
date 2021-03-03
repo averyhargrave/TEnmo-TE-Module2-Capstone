@@ -3,8 +3,8 @@ package com.techelevator.tenmo.model;
 public class Accounts {
 	
 	private long accountId;     // primary key, serial
-	private int userId;
-	private int balance;
+	private long userId;
+	private double balance;
 	
 	public long getAccountId() {
 		return accountId;
@@ -12,16 +12,16 @@ public class Accounts {
 	public void setAccountId(long accountId) {
 		this.accountId = accountId;
 	}
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	public int getBalance() {
+	public double getBalance() {
 		return balance;
 	}
-	public void setBalance(int balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 	@Override

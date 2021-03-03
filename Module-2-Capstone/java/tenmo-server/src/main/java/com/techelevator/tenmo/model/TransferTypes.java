@@ -4,6 +4,7 @@ public class TransferTypes {
 	
 	private long transferTypeId;
 	private String transferTypeDesc;
+	
 	public long getTransferTypeId() {
 		return transferTypeId;
 	}
@@ -21,6 +22,4 @@ public class TransferTypes {
 		return "TransferTypes [transferTypeId=" + transferTypeId + ", transferTypeDesc=" + transferTypeDesc + "]";
 	}
 	
-	
-
 }

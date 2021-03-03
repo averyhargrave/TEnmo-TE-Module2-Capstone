@@ -6,25 +6,18 @@ import com.techelevator.tenmo.model.Accounts;
 
 public interface AccountsDAO {
 	
-	// CRUD
-	
 	// create 
-	public Accounts createAccount (Accounts account);
-	
+	public Accounts createAccount(Accounts account);
 	
 	// read
-	public Accounts searchByAccountId (Long id);
-	
+	public Accounts searchByAccountId(Long id);
 	// getAllAccounts
-	
-	public List <Accounts> getAllAccounts ();
-	
+	public List<Accounts> getAllAccounts();
 
 	// update 
-	public void  updateAccount (Accounts updatedAccount);
-	
+	public void updateAccount(Accounts updatedAccount);
 	
 	// delete 
-	public void deleteAccount (Long id);
+	public void deleteAccount(Long id);
 	
 }
