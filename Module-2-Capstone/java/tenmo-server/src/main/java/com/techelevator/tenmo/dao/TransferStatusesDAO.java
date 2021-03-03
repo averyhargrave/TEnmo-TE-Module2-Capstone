@@ -16,8 +16,4 @@ public interface TransferStatusesDAO {
 	//update
 	public void updateTransferStatus (TransferStatuses updatedTransferStatus);
 	
-	
-	
-	
-
 }

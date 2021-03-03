@@ -42,6 +42,7 @@ public class JDBCTransferTypesDAO implements TransferTypesDAO {
 		}
 		return allTransferTypes;
 	}
+	
 	@Override
 	public void updateTransferType(TransferTypes updatedTransferType) {
 		// TODO Auto-generated method stub

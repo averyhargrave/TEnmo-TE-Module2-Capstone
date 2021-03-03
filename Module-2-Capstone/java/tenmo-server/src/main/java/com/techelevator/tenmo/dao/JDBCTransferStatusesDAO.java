@@ -46,7 +46,6 @@ public class JDBCTransferStatusesDAO implements TransferStatusesDAO {
 
 	@Override
 	public void updateTransferStatus(TransferStatuses updatedTransferStatus) {
-		// TODO Auto-generated method stub
 		
 	}
 
