@@ -7,9 +7,10 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import com.techelevator.tenmo.model.Transfers;
-
+@Component
 public class JDBCTransfersDAO implements TransfersDAO {
 
 	private JdbcTemplate jdbcTemplate;
