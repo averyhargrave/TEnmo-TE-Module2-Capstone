@@ -1,7 +1,10 @@
 package com.techelevator.tenmo;
 
+import java.util.Scanner;
+
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfers;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AccountsService;
 import com.techelevator.tenmo.services.AuthenticationService;
@@ -32,7 +35,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private ConsoleService console;
     private AuthenticationService authenticationService;
     private TransfersService transfersService = new TransfersService(API_BASE_URL);
-
     public static void main(String[] args) throws TransfersServiceException {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
     	app.run();
@@ -92,10 +94,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		
-		
-		
-		transfersService.sendTransfers(transfer, currentUser);
+		transfersService.sendBucks(currentUser);
 	}
 
 	private void requestBucks() {

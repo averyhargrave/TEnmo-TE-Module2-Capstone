@@ -39,8 +39,6 @@ public class TransfersController {
 		return transfer;
 	}
 
-	
-	
 	@RequestMapping(path = "/transfers", method = RequestMethod.POST)
 	public String sendTransfer(@RequestBody Transfers transfer) {
 		logAPICall("Called with the path: /transfers");

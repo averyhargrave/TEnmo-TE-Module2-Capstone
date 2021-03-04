@@ -18,9 +18,6 @@ import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Accounts;
 import com.techelevator.tenmo.model.User;
 
-/*******************************************************************************************************
- * This is where you code any API controllers you may create
-********************************************************************************************************/
 @PreAuthorize("isAuthenticated()")
 @RestController
 public class AccountController {
@@ -32,7 +29,6 @@ public class AccountController {
 			this.acctDAO = acctDAO;
 			this.userDAO = userDAO;
 		}
-		
 
 		@RequestMapping(path = "balance/{id}", method = RequestMethod.GET)
 		public BigDecimal getBalance(@PathVariable Long id) {
@@ -41,11 +37,10 @@ public class AccountController {
 			return balance;
 		}
 
-		
-		@RequestMapping(path = "/users", method = RequestMethod.GET)
-		public List <User> listUsers() {
-			logAPICall("Called with the path /users");
-			List <User> users = userDAO.findAll();
+		@RequestMapping(path = "listusers", method = RequestMethod.GET)
+		public List<User> listUsers() {
+			logAPICall("Called with the path: /listusers");
+			List<User> users = userDAO.findAll();
 			return users;
 		}
 		
@@ -55,6 +50,4 @@ public class AccountController {
 		     String timeNow = now.format(formatter);
 		     System.out.println(timeNow + "-" + message);
 		 }
-		
-		
 	}
