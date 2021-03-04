@@ -25,14 +25,14 @@ public class TransfersController {
 
 	private TransfersDAO transfersDAO;
 
-	@RequestMapping(value = "accounts/transfers/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/accounts/transfers/{id}", method = RequestMethod.GET)
 	public List<Transfers> getAllTransfersById(@PathVariable Long id) {
 		logAPICall("Called with the path: /accounts/transfers/" + id);
 		List<Transfers> results = transfersDAO.getAllTransfers(id);
 		return results;
 	}
 
-	@RequestMapping(path = "transfers/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
 	public Transfers getTransferById(@PathVariable Long id) {
 		logAPICall("Called with the path: /transfers/" + id);
 		Transfers transfer = transfersDAO.getTransferById(id);
@@ -40,28 +40,29 @@ public class TransfersController {
 	}
 
 	
-	@RequestMapping(path = "transfers", method = RequestMethod.POST)
+	
+	@RequestMapping(path = "/transfers", method = RequestMethod.POST)
 	public String sendTransfer(@RequestBody Transfers transfer) {
 		logAPICall("Called with the path: /transfers");
 		String results = transfersDAO.sendTransfer(transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 		return results;
 	}
 
-	@RequestMapping(path = "request", method = RequestMethod.POST)
+	@RequestMapping(path = "/request", method = RequestMethod.POST)
 	public String requestTransfer(@RequestBody Transfers transfer) {
 		logAPICall("Called with the path: /request");
 		String results = transfersDAO.requestTransfer(transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 		return results;
 	}
 
-	@RequestMapping(value = "request/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/request/{id}", method = RequestMethod.GET)
 	public List<Transfers> getAllTransferRequests(@PathVariable Long id) {
 		logAPICall("Called with the path: /request/" + id);
 		List<Transfers> results = transfersDAO.getPendingRequests(id);
 		return results;
 	}
 
-	@RequestMapping(path = "transfers/status/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/transfers/status/{id}", method = RequestMethod.PUT)
 	public String updateRequest(@RequestBody Transfers transfer, @PathVariable Long id) {
 		logAPICall("Called with the path: /transfers/status/" + id);
 		String results = transfersDAO.updateTransferRequest(transfer, id);

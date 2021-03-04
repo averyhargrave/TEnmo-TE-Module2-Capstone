@@ -37,7 +37,7 @@ public class TransfersService {
 	public Transfers[] transfersList() throws TransfersServiceException {
 		Transfers [] transfers = null;
 		try {
-			transfers = restTemplate.exchange(BASE_URL + "account/transfers/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
+			transfers = restTemplate.exchange(BASE_URL + "accounts/transfers/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
 	} catch (RestClientResponseException ex) {
 			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
 	}

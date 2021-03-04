@@ -17,8 +17,9 @@ public class JDBCTransfersDAO implements TransfersDAO {
 
 	private JdbcTemplate jdbcTemplate;
 
-	public JDBCTransfersDAO(DataSource dataSource) {
+	public JDBCTransfersDAO(DataSource dataSource, AccountsDAO acctDAO) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		this.acctDAO =acctDAO;
 	}
 	
 	AccountsDAO acctDAO;
@@ -62,7 +63,7 @@ public class JDBCTransfersDAO implements TransfersDAO {
 		Accounts acct = new Accounts();
 		acct = acctDAO.findByAccountId(sender);
 		double bal = acct.getBalance().doubleValue();
-		if(bal < amount.doubleValue()) {
+		if(bal > amount.doubleValue()) {
 			String sqlSendTransfer = "INSERT INTO transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) " + 
 						             "VALUES(2,2,?,?,?) ";
 			jdbcTemplate.update(sqlSendTransfer, sender, recipient, amount);

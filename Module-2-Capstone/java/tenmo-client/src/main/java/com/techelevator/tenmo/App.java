@@ -3,6 +3,7 @@ package com.techelevator.tenmo;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfers;
 import com.techelevator.tenmo.models.UserCredentials;
+import com.techelevator.tenmo.services.AccountsService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.TransfersService;
@@ -74,14 +75,15 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
-		
-		
+		AccountsService acctService = new AccountsService(API_BASE_URL, currentUser);
+			acctService.getBalance();
 	}
 
 	private void viewTransferHistory() throws TransfersServiceException {
-		// TODO Auto-generated method stub
-		transfersService.transfersList();
+		Transfers [] transfers = transfersService.transfersList();
+		 for (Transfers theTransfers : transfers) {
+			 System.out.println(theTransfers.toString());
+		 }
 	}
 
 	private void viewPendingRequests() {
