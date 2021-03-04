@@ -27,13 +27,13 @@ public class JDBCAccountsDAO implements AccountsDAO {
 	public BigDecimal getBalance(Long id) {
 		String sqlGetBal = "SELECT balance " +
 						   "FROM accounts " +
-						   "WHERE user_id = ?";
-		BigDecimal balance = null;
+						   "WHERE user_id = ? ";
+		BigDecimal bal = null;
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetBal, id);
 		if (results.next()) {
-			balance = results.getBigDecimal("balance");
+			bal = results.getBigDecimal("balance");
 		}
-		return balance;
+		return bal;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class JDBCAccountsDAO implements AccountsDAO {
 		System.out.println(newBal);
 		String sqlAddBal = "UPDATE accounts " +
 						   "SET balance = ? " +
-						   "WHERE user_id = ?";
+						   "WHERE user_id = ? ";
 		jdbcTemplate.update(sqlAddBal, newBal, id);
 		return acct.getBalance();
 	}
@@ -54,7 +54,7 @@ public class JDBCAccountsDAO implements AccountsDAO {
 		BigDecimal minusBal = account.getBalance().subtract(amountToSubtract);
 		String sqlMinusBal = "UPDATE accounts " +
 						     "SET balance = ? " +
-						     "WHERE user_id = ?";
+						     "WHERE user_id = ? ";
 		jdbcTemplate.update(sqlMinusBal, minusBal, id);
 		return account.getBalance();
 	}
@@ -64,7 +64,7 @@ public class JDBCAccountsDAO implements AccountsDAO {
 		Accounts acct = new Accounts();
 		String sqlFindByUserId = "SELECT * " +
 								 "FROM accounts " +
-								 "WHERE user_id = ?";
+								 "WHERE user_id = ? ";
 		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlFindByUserId, id);
 		acct = mapRowToAccounts(result);
 		return acct;
@@ -75,7 +75,7 @@ public class JDBCAccountsDAO implements AccountsDAO {
 		Accounts acct = new Accounts();
 		String sqlFindByAcctId = "SELECT * " +
 								 "FROM accounts " +
-								 "WHERE account_id = ?";
+								 "WHERE account_id = ? ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlFindByAcctId, id);
 		if (results.next()) {
 			acct = mapRowToAccounts(results);

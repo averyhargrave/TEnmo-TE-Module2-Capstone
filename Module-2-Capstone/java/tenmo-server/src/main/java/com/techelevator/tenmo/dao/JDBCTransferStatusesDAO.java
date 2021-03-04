@@ -26,7 +26,7 @@ public class JDBCTransferStatusesDAO implements TransferStatusesDAO {
 		TransferStatuses transferStatus = new TransferStatuses();
 		String sqlGetTransferStatusById = "SELECT transfer_status_id, transfer_status_desc " +
 								          "FROM transfer_statuses " +
-								          "WHERE transfer_status_id = ?";
+								          "WHERE transfer_status_id = ? ";
 		SqlRowSet transferStatusById = jdbcTemplate.queryForRowSet(sqlGetTransferStatusById, id);
 		transferStatus = mapRowToTransferStatuses(transferStatusById);
 		return transferStatus;
@@ -36,7 +36,7 @@ public class JDBCTransferStatusesDAO implements TransferStatusesDAO {
 	public List<TransferStatuses> getAllTransferStatuses() {
 		List<TransferStatuses> allTransferStatuses = new ArrayList<>();
 		String sqlGetAllTransferStatuses = "SELECT transfer_status_id, transfer_status_desc " +
-								    	   "FROM transfer_statuses";
+								    	   "FROM transfer_statuses ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllTransferStatuses);
 		while (results.next()) {
 			TransferStatuses sqlTransferStatuses = mapRowToTransferStatuses(results);

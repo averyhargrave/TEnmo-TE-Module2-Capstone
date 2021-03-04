@@ -25,7 +25,7 @@ public class JDBCTransferTypesDAO implements TransferTypesDAO {
 		TransferTypes transferType = new TransferTypes();
 		String sqlGetTransferTypeById = "SELECT transfer_type_id, transfer_type_desc " +
 								        "FROM transfer_types " +
-								        "WHERE transfer_type_id = ?";
+								        "WHERE transfer_type_id = ? ";
 		SqlRowSet transferTypeById = jdbcTemplate.queryForRowSet(sqlGetTransferTypeById, id);
 		transferType = mapRowToTransferTypes(transferTypeById);
 		return transferType;
@@ -35,7 +35,7 @@ public class JDBCTransferTypesDAO implements TransferTypesDAO {
 	public List<TransferTypes> getAllTransferTypes() {
 		List<TransferTypes> allTransferTypes = new ArrayList<>();
 		String sqlGetAllTransferTypes = "SELECT transfer_type_id, transfer_type_desc " +
-								        "FROM transfer_types";
+								        "FROM transfer_types ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllTransferTypes);
 		while (results.next()) {
 			TransferTypes sqlTransferTypes = mapRowToTransferTypes(results);

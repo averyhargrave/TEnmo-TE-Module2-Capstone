@@ -34,8 +34,6 @@ public class TenmoApplicationServices {
 		return balance;
 	}
 	
-	
-	
 	  private HttpEntity makeAuthEntity() {
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.setBearerAuth(currentUser.getToken());
