@@ -33,7 +33,7 @@ public class TransfersService {
 
 
 	
-	// gives a list of all the users
+	// list all transfers
 	public Transfers[] transfersList() throws TransfersServiceException {
 		Transfers [] transfers = null;
 		try {
@@ -42,14 +42,12 @@ public class TransfersService {
 			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
 	}
 	        return transfers;
-	    }
+	}
 	
 	// send a transfer
 	
 	
-	// list all transfers
-	
-	
+	// gives a list of all the users
 	
 	
 	private HttpEntity<Transfers> makeTransferEntity(Transfers transfer) {
