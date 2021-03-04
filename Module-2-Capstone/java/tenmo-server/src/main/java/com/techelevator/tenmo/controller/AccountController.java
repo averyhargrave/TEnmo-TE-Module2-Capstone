@@ -32,18 +32,11 @@ public class AccountController {
 		}
 		
 
-		@RequestMapping (path= "/accounts",method = RequestMethod.GET) 
-		public List<Accounts> listAllAccounts () {
-			logAPICall("Called with the path: /accounts");   // log the API call to the server
-			List <Accounts> theAccounts;
-			theAccounts = acctDAO.getAllAccounts();
-			return theAccounts;
-		}
 
 		@RequestMapping(path = "balance/{id}", method = RequestMethod.GET)
 		public BigDecimal getBalance(@PathVariable Long id) {
 			logAPICall("Called with the path: /accounts/" + id);
-			BigDecimal balance = acctDAO.getAccountBalance(id);
+			BigDecimal balance = acctDAO.getBalance(id);
 			return balance;
 		}
 

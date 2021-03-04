@@ -21,7 +21,8 @@ public class JDBCAccountsDAO implements AccountsDAO {
 	public JDBCAccountsDAO(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-
+	
+	
 	@Override
 	public BigDecimal getBalance(Long id) {
 		String sqlGetBal = "SELECT balance " +
@@ -97,4 +98,7 @@ public class JDBCAccountsDAO implements AccountsDAO {
 		account.setBalance(results.getBigDecimal("balance"));
 		return account;
 	}
+
+
+	
 }

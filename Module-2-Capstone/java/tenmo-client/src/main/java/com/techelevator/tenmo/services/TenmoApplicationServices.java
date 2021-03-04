@@ -34,13 +34,7 @@ public class TenmoApplicationServices {
 		return balance;
 	}
 	
-	private HttpEntity<Transfers> makeTransferEntity(Transfers transfer) {
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_JSON);
-	    headers.setBearerAuth(currentUser.getToken());
-	    HttpEntity<Transfers> entity = new HttpEntity<>(transfer, headers);
-	    return entity;
-	  }
+	
 	
 	  private HttpEntity makeAuthEntity() {
 	    HttpHeaders headers = new HttpHeaders();
