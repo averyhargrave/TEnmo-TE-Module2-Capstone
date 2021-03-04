@@ -34,9 +34,15 @@ public class TransfersService {
 
 	
 	// gives a list of all the users
-	
-	
-	
+	public Transfers[] transfersList() throws TransfersServiceException {
+		Transfers [] transfers = null;
+		try {
+			transfers = restTemplate.exchange(BASE_URL + "account/transfers/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
+	} catch (RestClientResponseException ex) {
+			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+	}
+	        return transfers;
+	    }
 	
 	// send a transfer
 	
