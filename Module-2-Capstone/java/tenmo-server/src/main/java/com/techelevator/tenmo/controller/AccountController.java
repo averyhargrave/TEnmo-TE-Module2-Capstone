@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.AccountsDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Accounts;
+import com.techelevator.tenmo.model.User;
 
 /*******************************************************************************************************
  * This is where you code any API controllers you may create
@@ -23,6 +24,7 @@ import com.techelevator.tenmo.model.Accounts;
 @PreAuthorize("isAuthenticated()")
 @RestController
 public class AccountController {
+	
 		AccountsDAO acctDAO;
 		private UserDAO userDAO;
 		
@@ -32,20 +34,27 @@ public class AccountController {
 		}
 		
 
-
 		@RequestMapping(path = "balance/{id}", method = RequestMethod.GET)
 		public BigDecimal getBalance(@PathVariable Long id) {
-			logAPICall("Called with the path: /accounts/" + id);
+			logAPICall("Called with the path: /balance" + id);
 			BigDecimal balance = acctDAO.getBalance(id);
 			return balance;
 		}
 
-		public void logAPICall(String message) {    // write a message with a time stamp to the server log 
-			LocalDateTime now = LocalDateTime.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm/dd/yyyy HH:mm:ss.A");
-			String timeNow = now.format(formatter);
-			System.out.println(timeNow + "-" + message);
+		
+		@RequestMapping(path = "/users", method = RequestMethod.GET)
+		public List <User> listUsers() {
+			logAPICall("Called with the path /users");
+			List <User> users = userDAO.findAll();
+			return users;
 		}
-}
-
-	
+		
+		public void logAPICall(String message) {    // write a message with a time stamp to the server log 
+			 LocalDateTime now = LocalDateTime.now();
+		     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm/dd/yyyy HH:mm:ss.A");
+		     String timeNow = now.format(formatter);
+		     System.out.println(timeNow + "-" + message);
+		 }
+		
+		
+	}
