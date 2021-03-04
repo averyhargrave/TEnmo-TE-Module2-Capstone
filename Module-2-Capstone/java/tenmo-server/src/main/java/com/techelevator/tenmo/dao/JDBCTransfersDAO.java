@@ -26,18 +26,11 @@ public class JDBCTransfersDAO implements TransfersDAO {
 	@Override
 	public List<Transfers> getAllTransfers(Long id) {
 		List<Transfers> list = new ArrayList<>();
-		String sqlGetAllTransfers = "SELECT transfers.*, user1.username AS sender, user2.username AS recipient " +
-				 					"FROM transfers " + 
-									"JOIN accounts acct1 " +
-									"ON transfers.account_from = acct1.account_id " + 
-									"JOIN accounts acct2 " +
-									"ON transfers.account_to = acct2.account_id " + 
-									"JOIN users user1 " +
-									"ON acct1.user_id = user1.user_id " + 
-									"JOIN users user2 " +
-									"ON acct2.user_id = user2.user_id " + 
-									"WHERE acct1.user_id = ? " +
-									"OR acct2.user_id = ? ";
+		String sqlGetAllTransfers = "SELECT * " +
+				 					"FROM transfers " +  
+									"WHERE account_from = ? " +
+				 					"OR account_to = ? ";
+									
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllTransfers, id, id);
 		while (results.next() ) {
 			Transfers transfer = mapRowToTransfers(results);
@@ -49,21 +42,10 @@ public class JDBCTransfersDAO implements TransfersDAO {
 	@Override
 	public Transfers getTransferById(Long id) {
 		Transfers transfer = new Transfers();
-		String sqlGetTransferById = "SELECT transfers.*, user1.username AS sender, user2.username AS recipient, transfer_statuses.transfer_status_desc, trasnfer_types.transfer_type_desc " +
+		String sqlGetTransferById = "SELECT * " +
 									"FROM transfers " + 
-								    "JOIN accounts acct1 " +
-								    "ON transfers.account_from = acct1.account_id " + 
-								    "JOIN accounts acct2 " +
-								    "ON transfers.account_to = acct2.account_id " + 
-								    "JOIN users user1 " +
-								    "ON acct1.user_id = user1.user_id " + 
-								    "JOIN users user2 " +
-								    "ON acct2.user_id = user2.user_id " + 
-								    "JOIN transfer_statuses " +
-								    "ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " + 
-								    "JOIN transfer_types " +
-								    "ON transfers.transfer_type_id = transfer_types.transfer_type_id " + 
-								    "WHERE transfers.transfer_id = ? ";
+								    "WHERE transfer_id = ? ";
+		
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetTransferById, id);
 		if (results.next()) {
 			transfer = mapRowToTransfers(results);
@@ -82,7 +64,7 @@ public class JDBCTransfersDAO implements TransfersDAO {
 		double bal = acct.getBalance().doubleValue();
 		if(bal < amount.doubleValue()) {
 			String sqlSendTransfer = "INSERT INTO transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) " + 
-						 "VALUES(2,2,?,?,?) ";
+						             "VALUES(2,2,?,?,?) ";
 			jdbcTemplate.update(sqlSendTransfer, sender, recipient, amount);
 			acctDAO.addBalance(amount, recipient);
 			acctDAO.minusBalance(amount, sender);		
@@ -149,8 +131,8 @@ public class JDBCTransfersDAO implements TransfersDAO {
 		double bal = acct.getBalance().doubleValue();
 		if((bal - transfer.getAmount().doubleValue()) >= 0.00) {
 			String sqlUpdateTransfer = "UPDATE transfers " +
-						 "SET transfer_status_id = ? " +
-						 "WHERE transfer_id = ? ";
+									   "SET transfer_status_id = ? " +
+									   "WHERE transfer_id = ? ";
 			jdbcTemplate.update(sqlUpdateTransfer, id, transfer.getTransferId());
 			acctDAO.addBalance(transfer.getAmount(), transfer.getAccountTo());
 			acctDAO.minusBalance(transfer.getAmount(), transfer.getAccountFrom());

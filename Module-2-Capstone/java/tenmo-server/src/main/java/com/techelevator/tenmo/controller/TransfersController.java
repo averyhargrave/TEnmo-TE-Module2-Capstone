@@ -19,10 +19,8 @@ import com.techelevator.tenmo.model.Transfers;
 @RestController
 public class TransfersController {
 
-	TransfersDAO transDAO;
-
 	public TransfersController (TransfersDAO transDAO) {
-		this.transDAO = transDAO;
+		this.transfersDAO = transDAO;
 	}
 
 	private TransfersDAO transfersDAO;

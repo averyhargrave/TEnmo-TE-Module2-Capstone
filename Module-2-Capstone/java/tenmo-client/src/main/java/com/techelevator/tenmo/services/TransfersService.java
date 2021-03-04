@@ -31,6 +31,19 @@ public class TransfersService {
 		BASE_URL = url;
 	}
 
+
+	
+	// gives a list of all the users
+	
+	
+	
+	
+	// send a transfer
+	
+	
+	// list all transfers
+	
+	
 	
 	
 	private HttpEntity<Transfers> makeTransferEntity(Transfers transfer) {
