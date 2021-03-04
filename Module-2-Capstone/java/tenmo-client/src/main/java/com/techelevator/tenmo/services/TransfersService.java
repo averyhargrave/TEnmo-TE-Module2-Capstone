@@ -24,20 +24,19 @@ public class TransfersService {
 	
 	private String BASE_URL;
 	private RestTemplate restTemplate = new RestTemplate();
-	private AuthenticatedUser user;
+	//private AuthenticatedUser user;
 
-	public TransfersService(String url, AuthenticatedUser user) {
-		this.user = user;
+	public TransfersService(String url) {
+		//this.user = user;
 		BASE_URL = url;
 	}
 
-
 	
 	// list all transfers
-	public Transfers[] transfersList() throws TransfersServiceException {
+	public Transfers[] transfersList(AuthenticatedUser user) throws TransfersServiceException {
 		Transfers [] transfers = null;
 		try {
-			transfers = restTemplate.exchange(BASE_URL + "accounts/transfers/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
+			transfers = restTemplate.exchange(BASE_URL + "accounts/transfers/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(user), Transfers[].class).getBody();
 	} catch (RestClientResponseException ex) {
 			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
 	}
@@ -45,12 +44,31 @@ public class TransfersService {
 	}
 	
 	// send a transfer
+	public void sendTransfers (Transfers transfer, AuthenticatedUser user) throws TransfersServiceException {
+		try {
+	  restTemplate.postForObject(BASE_URL + "transfers/", makeTransferEntity(transfer, user), Transfers[].class);
+	} catch (RestClientResponseException ex) {
+			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+	}
+	        
+	}
 	
 	
 	// gives a list of all the users
 	
 	
-	private HttpEntity<Transfers> makeTransferEntity(Transfers transfer) {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private HttpEntity<Transfers> makeTransferEntity(Transfers transfer, AuthenticatedUser user) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(user.getToken());
@@ -58,7 +76,7 @@ public class TransfersService {
 		return entity;
 	}
 
-	private HttpEntity makeAuthEntity() {
+	private HttpEntity makeAuthEntity(AuthenticatedUser user) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(user.getToken());
 		HttpEntity entity = new HttpEntity<>(headers);

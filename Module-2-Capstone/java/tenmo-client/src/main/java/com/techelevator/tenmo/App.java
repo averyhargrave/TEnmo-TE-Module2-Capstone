@@ -31,7 +31,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
-    private TransfersService transfersService = new TransfersService(API_BASE_URL, currentUser);
+    private TransfersService transfersService = new TransfersService(API_BASE_URL);
 
     public static void main(String[] args) throws TransfersServiceException {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
@@ -80,7 +80,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() throws TransfersServiceException {
-		Transfers [] transfers = transfersService.transfersList();
+		Transfers [] transfers = transfersService.transfersList(currentUser);
 		 for (Transfers theTransfers : transfers) {
 			 System.out.println(theTransfers.toString());
 		 }
@@ -92,8 +92,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
 		
+		
+		
+		transfersService.sendTransfers(transfer, currentUser);
 	}
 
 	private void requestBucks() {
