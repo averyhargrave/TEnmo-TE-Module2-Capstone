@@ -13,19 +13,31 @@ import org.springframework.web.client.RestTemplate;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfers;
 import com.techelevator.tenmo.models.User;
+import com.techelevator.view.ConsoleService;
 
 public class TransfersService {
 	
 	private String BASE_URL;
 	private RestTemplate restTemplate = new RestTemplate();
+	private ConsoleService consoleService = new ConsoleService(System.in, System.out);
 
 	public TransfersService(String url) {
 		BASE_URL = url;
 	}
 
+	public Transfers getTransferById(AuthenticatedUser user, Long id) throws TransfersServiceException {
+		Transfers transfer;
+		try {
+			transfer = restTemplate.exchange(BASE_URL + "/transfers/" + id, HttpMethod.GET, makeAuthEntity(user), Transfers.class).getBody();
+		} catch(RestClientResponseException ex) {
+			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
+		}
+		return transfer;
+	}
+	
 	// list all transfers
-	public Transfers[] transfersList(AuthenticatedUser user) throws TransfersServiceException {
-		Transfers[] transfers = null;
+	public Transfers[] listTransfers(AuthenticatedUser user) throws TransfersServiceException {
+		Transfers[] transfers;
 		try {
 			transfers = restTemplate.exchange(BASE_URL + "accounts/transfers/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(user), Transfers[].class).getBody();
 		} catch (RestClientResponseException ex) {
@@ -33,42 +45,60 @@ public class TransfersService {
 		}
 		return transfers;
 	}
-
-	// send a transfer
-	public void sendTransfers (Transfers transfer, AuthenticatedUser user) throws TransfersServiceException {
+	
+	// list all pending transfers
+	public Transfers[] getPendingTransfers(AuthenticatedUser user) throws TransfersServiceException {
+		Transfers[] pendTrans = null;
 		try {
-			restTemplate.postForObject(BASE_URL + "transfers/", makeTransferEntity(transfer, user), Transfers[].class);
+			pendTrans = restTemplate.exchange(BASE_URL + "accounts/transfers/pending/" + user.getUser().getId(), HttpMethod.GET, makeAuthEntity(user), Transfers[].class).getBody();
 		} catch (RestClientResponseException ex) {
 			throw new TransfersServiceException(ex.getRawStatusCode() + " : " + ex.getResponseBodyAsString());
-		}    
+		}
+		return pendTrans;
 	}
 
+	// send money
 	public void sendBucks(AuthenticatedUser user) {
 		User[] users;
 		Transfers transfer = new Transfers();
-		Scanner input = new Scanner(System.in);
+		
 		users = restTemplate.exchange(BASE_URL + "listusers", HttpMethod.GET, makeAuthEntity(user), User[].class).getBody();
-		for (User i : users) {
-			if (i.getId() != user.getUser().getId()) {
+		for(User i : users) {
+			if(i.getId() != user.getUser().getId()) {
 				System.out.println(i.getId() + ": " + i.getUsername());				
 			}
 		}
-		System.out.print("Enter account ID of the recipient or press 0 to cancel: ");
-		transfer.setAccountTo(Long.parseLong(input.nextLine()));
+		transfer.setAccountTo(Long.parseLong(consoleService.getUserInput("Enter account ID of the recipient or press 0 to cancel")));
 		transfer.setAccountFrom(user.getUser().getId());
-		if (transfer.getAccountTo() != 0) {
-			System.out.print("Enter amount: ");
-			transfer.setAmount(new BigDecimal(Double.parseDouble(input.nextLine())));
-			System.out.println("Error when entering amount");
+		if(transfer.getAccountTo() != 0) {
+			transfer.setAmount(new BigDecimal(Double.parseDouble(consoleService.getUserInput("Enter amount"))));
 			String output = restTemplate.exchange(BASE_URL + "transfers", HttpMethod.POST, makeTransferEntity(transfer, user), String.class).getBody();
 			System.out.println(output);			
 		}
-		input.close();
 	}
-
 	
-	// gives a list of all the users
-	public User[] getUsers(AuthenticatedUser user) {
+	// request money
+	public void requestBucks(AuthenticatedUser user) {
+		User[] users = null;
+		Transfers transfer = new Transfers();
+		
+		users = restTemplate.exchange(BASE_URL + "listusers", HttpMethod.GET, makeAuthEntity(user), User[].class).getBody();
+		for(User i : users) {
+			if(i.getId() != user.getUser().getId()) {
+				System.out.println(i.getId() + ": " + i.getUsername());				
+			}
+		}
+		transfer.setAccountTo(user.getUser().getId());
+		transfer.setAccountFrom(Long.parseLong(consoleService.getUserInput("Enter account ID of the sender or press 0 to cancel")));
+		if(transfer.getAccountTo() != 0) {
+			transfer.setAmount(new BigDecimal(Double.parseDouble(consoleService.getUserInput("Enter amount"))));			
+			String output = restTemplate.exchange(BASE_URL + "request", HttpMethod.POST, makeTransferEntity(transfer, user), String.class).getBody();
+			System.out.println(output);			
+		}
+	}
+	
+	// list all users
+	public User[] listUsers(AuthenticatedUser user) {
 		User[] userArray = null;
 		try {
 			userArray = restTemplate.exchange(BASE_URL + "users", HttpMethod.GET, makeAuthEntity(user), User[].class).getBody();
@@ -80,6 +110,8 @@ public class TransfersService {
 		}
 		return userArray;
 	}
+	
+	
 	
 	private HttpEntity<Transfers> makeTransferEntity(Transfers transfer, AuthenticatedUser user) {
 		HttpHeaders headers = new HttpHeaders();
@@ -96,7 +128,3 @@ public class TransfersService {
 		return entity;
 	}
 }
-
-
-
-

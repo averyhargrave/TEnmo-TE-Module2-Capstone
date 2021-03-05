@@ -18,12 +18,4 @@ public class TransferStatuses {
 	public void setTransferStatusDesc(String transferStatusDesc) {
 		this.transferStatusDesc = transferStatusDesc;
 	}
-	@Override
-	public String toString() {
-		return "TransferStatuses [transferStatusId=" + transferStatusId + ", transferStatusDesc=" + transferStatusDesc
-				+ "]";
-	}
-	
-	
-	
 }

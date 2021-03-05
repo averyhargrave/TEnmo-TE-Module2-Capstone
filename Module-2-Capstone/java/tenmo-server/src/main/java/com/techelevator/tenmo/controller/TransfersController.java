@@ -38,6 +38,14 @@ public class TransfersController {
 		Transfers transfer = transfersDAO.getTransferById(id);
 		return transfer;
 	}
+	
+	// get pending transfers
+	@RequestMapping(path = "accounts/transfers/pending/{id}", method = RequestMethod.GET)
+	public List<Transfers> getPendingTransfers(@PathVariable Long id) {
+		logAPICall("Called with the path: /transfers/pending/" + id);
+		List<Transfers> pendTrans = transfersDAO.getPendingRequests(id);
+		return pendTrans;
+	}
 
 	@RequestMapping(path = "/transfers", method = RequestMethod.POST)
 	public String sendTransfer(@RequestBody Transfers transfer) {

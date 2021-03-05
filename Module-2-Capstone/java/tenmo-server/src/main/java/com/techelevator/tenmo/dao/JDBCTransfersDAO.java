@@ -33,7 +33,7 @@ public class JDBCTransfersDAO implements TransfersDAO {
 				 					"OR account_to = ? ";
 									
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllTransfers, id, id);
-		while (results.next() ) {
+		while(results.next()) {
 			Transfers transfer = mapRowToTransfers(results);
 			list.add(transfer);
 		}
@@ -57,7 +57,7 @@ public class JDBCTransfersDAO implements TransfersDAO {
 	@Override
 	public String sendTransfer(Long sender, Long recipient, BigDecimal amount) {
 		if (sender == recipient) {
-			return "No embezzling on my watch!";
+			return "Are you seriously trying to launder money right now?";
 		}
 		// some sort of if statement, if the sender has more money than the transfer amount, the transaction succeeds
 		Accounts acct = new Accounts();
@@ -69,44 +69,38 @@ public class JDBCTransfersDAO implements TransfersDAO {
 			jdbcTemplate.update(sqlSendTransfer, sender, recipient, amount);
 			acctDAO.addBalance(amount, recipient);
 			acctDAO.minusBalance(amount, sender);		
-			return "Transfer finished.";	
+			return "You have successfully sent more than enough money to buy a Diet Mtn Dew.";	
 	} else {
-		return "Sorry, zucchini, you ain't got the dough.";
+		return "You don't have enough for this transfer, but you might be able to afford a Diet Mtn Dew.";
 		}
 	}
 	@Override
 	public String requestTransfer(Long sender, Long recipient, BigDecimal amount) {
 		if (sender == recipient) {
-			return "You can't send money to yourself, knucklehead.";
+			return "You can't request money from yourself, knucklehead.";
 		}
 		// an if statement to check if sender acct has enough money to send requested amount
 		Accounts acct = new Accounts();
 		acct = acctDAO.findByAccountId(sender);
 		double bal = acct.getBalance().doubleValue();
-		if(bal < amount.doubleValue()) {
+		if(bal > amount.doubleValue()) {
 			String sqlRequestTransfer = "INSERT INTO transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount) " + 
 									    "VALUES(1,1,?,?,?) ";
 			jdbcTemplate.update(sqlRequestTransfer, sender, recipient, amount);
-			return "Request hath been sent.";
+			return "Jason hasn't stolen this money yet, so your request has posted.";
 	} else {
-		return "Couldn't process your request, but have some meatballs instead.";
+		return "It seems as though Jason has stolen all of the money from this account.";
 		}
 	}
 	
 	@Override
 	public List<Transfers> getPendingRequests(Long id) {
 		List<Transfers> transfers = new ArrayList<>();
-		String sqlGetPendRequests = "SELECT transfers.*, user1.username AS sender, user2.username AS recipient " +
+		String sqlGetPendRequests = "SELECT transfers.* " +
 									"FROM transfers " + 
-									"JOIN accounts acct1 " +
-									"ON transfers.account_from = acct1.account_id " + 
-									"JOIN accounts acct2 " +
-									"ON transfers.account_to = acct2.account_id " + 
-									"JOIN users user1 " +
-									"ON acct1.user_id = user1.user_id " + 
-									"JOIN users user2 " +
-									"ON acct2.user_id = user2.user_id " + 
-									"WHERE transfer_status_id = 1 " +
+									"JOIN transfer_statuses " + 
+									"ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
+									"WHERE transfers.transfer_status_id = 1 " +
 									"AND (account_from = ? OR account_to = ?) ";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetPendRequests, id, id);
 		while (results.next()) {

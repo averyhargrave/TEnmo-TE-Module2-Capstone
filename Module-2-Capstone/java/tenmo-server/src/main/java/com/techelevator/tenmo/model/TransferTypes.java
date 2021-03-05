@@ -16,10 +16,5 @@ public class TransferTypes {
 	}
 	public void setTransferTypeDesc(String transferTypeDesc) {
 		this.transferTypeDesc = transferTypeDesc;
-	}
-	@Override
-	public String toString() {
-		return "TransferTypes [transferTypeId=" + transferTypeId + ", transferTypeDesc=" + transferTypeDesc + "]";
-	}
-	
+	}	
 }

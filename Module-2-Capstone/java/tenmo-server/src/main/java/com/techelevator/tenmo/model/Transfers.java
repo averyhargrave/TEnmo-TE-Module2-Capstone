@@ -49,9 +49,7 @@ public class Transfers {
 	}
 	@Override
 	public String toString() {
-		return "Transfers [transferId=" + transferId + ", transferTypeId=" + transferTypeId + ", transferStatusId="
-				+ transferStatusId + ", accountFrom=" + accountFrom + ", accountTo=" + accountTo + ", amount=" + amount
-				+ "]";
+		return "ID:" + transferId + "\t From sender: " + accountFrom + "\t To recipient: " + accountTo + "\t In the amount of $" + amount;
 	}
 	
 	

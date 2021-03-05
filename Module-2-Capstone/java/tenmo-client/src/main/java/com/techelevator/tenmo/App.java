@@ -82,15 +82,25 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() throws TransfersServiceException {
-		Transfers [] transfers = transfersService.transfersList(currentUser);
-		 for (Transfers theTransfers : transfers) {
-			 System.out.println(theTransfers.toString());
-		 }
+		Transfers [] transfers = transfersService.listTransfers(currentUser);
+		
+		int userInput = Integer.parseInt(console.getUserInput("Would you like to see all your transfers [1], or a certain transfer ID? [2]"));
+		if(userInput == 1) {
+			for(Transfers theTransfers : transfers) {
+				System.out.println(theTransfers.toString());
+			}
+		} else if(userInput == 2) {
+			Long id = Long.parseLong(console.getUserInput("Enter the ID"));
+			System.out.println(transfersService.getTransferById(currentUser, id).toString());
+		}
 	}
 
-	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
-		
+	private void viewPendingRequests() throws TransfersServiceException {
+		Transfers[] pendTrans = transfersService.getPendingTransfers(currentUser);
+		System.out.println("Pending Transactions: ");
+		for(Transfers pending : pendTrans) {
+			System.out.println(pending.toString());
+		}
 	}
 
 	private void sendBucks() {
@@ -98,8 +108,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
-		
+		transfersService.requestBucks(currentUser);
 	}
 	
 	private void exitProgram() {
